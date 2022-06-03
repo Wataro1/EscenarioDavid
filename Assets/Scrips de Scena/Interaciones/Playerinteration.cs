@@ -12,7 +12,10 @@ public class Playerinteration : MonoBehaviour
     public Transform cameraPlayer;
     public Transform objetoVacio;
     public LayerMask lm;
-    public LayerMask Ml;
+    public Transform pistol;
+    public GameObject Gun;
+    
+  
     private void OnTriggerEnter(Collider other)
     {
         // reproducción de la animación de la puerta 
@@ -30,6 +33,12 @@ public class Playerinteration : MonoBehaviour
             }
             playerState.pastillasCount++;
 
+        }
+        if(other.tag == "Pistol")
+        {
+            Gun.transform.parent = pistol;
+            Gun.transform.localPosition = Vector3.zero;
+            
         }
         
     }
@@ -62,51 +71,64 @@ public class Playerinteration : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+      void Update ()
+     {
+
+        if (objetoVacio.childCount > 0 && Input.GetButtonDown("Fire2") )
+        {
+            objetoVacio.GetComponentInChildren<Rigidbody>().isKinematic = false;
+            objetoVacio.GetChild(0).transform.parent = null;
+            // objetoVacio.GetComponentInChildren<Transform>().parent = null;
+        }
+
         Debug.DrawRay(cameraPlayer.position, cameraPlayer.forward, Color.black);
         RaycastHit hit;
-        if (Physics.Raycast(cameraPlayer.position,cameraPlayer.forward, out hit,4f ,lm))
+
+       
+        if (Physics.Raycast(cameraPlayer.position, cameraPlayer.forward, out hit, 4f, lm))
         {
-            
-            if (Input.GetButton("Fire2"))
-            {
-                bool coger = true;
-                if (coger == true) 
-                {
-                    hit.transform.parent = objetoVacio;
-                    hit.transform.localPosition = Vector3.zero;
-                    Debug.Log(hit.transform.name);
-                }
-                if (Input.GetButton("Fire2"))
-                {
-                    coger = false ;
-                    if (coger == false)
-                    {
-                        hit.transform.parent = null;
-                    }
-                    
-                }
-            }
-        }
-        if (Physics.Raycast(cameraPlayer.position, cameraPlayer.forward, out hit, 4f, Ml))
-        {
-            if(objetoVacio.childCount >0 && Input.GetButtonDown("Fire2"))
-            {
-                objetoVacio.GetComponentInChildren<Rigidbody>().isKinematic = false;
-                objetoVacio.GetChild(0).transform.parent = null;
-               // objetoVacio.GetComponentInChildren<Transform>().parent = null;
-            }
-            if(Input.GetButtonDown("Fire2"))
+           
+
+            if (Input.GetButtonDown("Fire2") )
             {
                 hit.transform.GetComponent<Rigidbody>().isKinematic = true;
                 hit.transform.parent = objetoVacio;
                 hit.transform.localPosition = Vector3.zero;
 
                 Debug.Log(hit.transform.name);
+                
             }
+
+            // Coger la caja de una manera diferente 
+            /* if (Input.GetButton("Fire2"))
+             {
+                 bool coger = true;
+                 if (coger == true) 
+                 {
+                     hit.transform.parent = objetoVacio;
+                     hit.transform.localPosition = Vector3.zero;
+                     Debug.Log(hit.transform.name);
+                 }
+                 if (Input.GetButton("Fire2"))
+                 {
+                     coger = false ;
+                     if (coger == false)
+                     {
+                         hit.transform.parent = null;
+                     }
+
+                 }
+             }*/
+        }
+        if(objetoVacio.childCount > 0)
+        {
+             Gun.gameObject.SetActive(false);
         }
 
+        if(objetoVacio.childCount == 0)
+        {
+            Gun.gameObject.SetActive(true);
+        }
 
-    }
+      }
 }
