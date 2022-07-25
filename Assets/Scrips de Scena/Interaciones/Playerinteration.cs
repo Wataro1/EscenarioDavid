@@ -37,7 +37,8 @@ public class Playerinteration : MonoBehaviour
         if(other.tag == "Pistol")
         {
             Gun.transform.parent = pistol;
-            Gun.transform.localPosition = Vector3.zero;
+            Gun.transform.localRotation = Quaternion.identity;
+            Gun.transform.localPosition = Vector3.zero; 
             
         }
         
@@ -120,12 +121,12 @@ public class Playerinteration : MonoBehaviour
                  }
              }*/
         }
-        if(objetoVacio.childCount > 0)
+        if(objetoVacio.childCount > 0 && pistol.childCount > 0)
         {
              Gun.gameObject.SetActive(false);
         }
 
-        if(objetoVacio.childCount == 0)
+        if(objetoVacio.childCount == 0 && pistol.childCount > 0) 
         {
             Gun.gameObject.SetActive(true);
         }
